@@ -5,7 +5,7 @@ using UnityEngine;
 public class scr_spells : MonoBehaviour
 {
     //This script is intended to work on an object that comes into existence briefly and then goes away
-    public float pushForce, pushRadius;
+    public float pushForce, pushRadius, pushDamage;
     private GameObject pulled;
     private Vector3 pullVelocity = Vector3.zero;
 
@@ -39,10 +39,12 @@ public class scr_spells : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //Debug.Log(other);
-        if (other != null && other.gameObject.CompareTag("Target")) 
+        if (other != null && other.gameObject.CompareTag("Target") ||
+            other != null && other.gameObject.CompareTag("Enemy")) 
         {
             if (PushSpell) { Push(other.gameObject); }
             else if (PullSpell) { Pull(other.gameObject); }
+            if (other.gameObject.CompareTag("Enemy")) { other.gameObject.GetComponent<enemyAI_Script>().health -= pushDamage; }
         }
     }
 

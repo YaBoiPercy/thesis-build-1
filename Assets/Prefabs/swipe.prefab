@@ -68,7 +68,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58b4d1003bc6c084fa4fa9ca933d198b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pushForce: 800
+  pushForce: 300
   pushRadius: 5
+  pushDamage: 1
   player: {fileID: 0}
+  wand: {fileID: 0}
   PushSpell: 1
+  PullSpell: 0

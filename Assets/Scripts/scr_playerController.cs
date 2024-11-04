@@ -11,6 +11,7 @@ public class scr_playerController : MonoBehaviour
     public float mSpd;
     public float defaultSpd;
     public float dTime = 0.5f;
+    public float health;
     public Vector3 rotationSetting;
 
     //public GameObject firePointU;
@@ -83,6 +84,7 @@ public class scr_playerController : MonoBehaviour
                 }
             }
         }
+        if (health <= 0f) { Death(); }
     }
 
     void Attack(GameObject castSpell)
@@ -98,6 +100,12 @@ public class scr_playerController : MonoBehaviour
             }
             
         }
+    }
+
+    void Death()
+    {
+        Debug.Log("YOU DIED");
+        // Code for death, reset scene?
     }
 
     private void FixedUpdate()
