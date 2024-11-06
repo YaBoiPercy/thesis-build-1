@@ -7,6 +7,7 @@ TagManager:
   - Target
   - Wand
   - Enemy
+  - Dev Log
   layers:
   - Default
   - TransparentFX

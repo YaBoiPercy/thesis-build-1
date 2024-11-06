@@ -9,9 +9,12 @@ public class scr_playerController : MonoBehaviour
     Vector3 velocity;
     public Rigidbody body;
     public float mSpd;
+    public float dashSpd;
+    public float dashCooldown;
     public float defaultSpd;
     public float dTime = 0.5f;
     public float health;
+    public bool dashing;
     public Vector3 rotationSetting;
 
     //public GameObject firePointU;
@@ -31,12 +34,15 @@ public class scr_playerController : MonoBehaviour
         rotationSetting = new Vector3(0, 0, 0f);
     }
 
+
+
     // Update is called once per frame
     void Update()
     {
         velocity = Vector3.zero;
         velocity.x = Input.GetAxisRaw("Horizontal");
         velocity.z = Input.GetAxisRaw("Vertical"); //We move on X and Z, not Y. Result of moving from 2 to 3 dimensions
+        if (Input.GetKeyDown(KeyCode.Space) && currentAttack == null) { Dash(); }
 
         if (velocity.x > 0)
         {
@@ -64,7 +70,7 @@ public class scr_playerController : MonoBehaviour
         //    if (equippedSpell == spellA) { equippedSpell = spellB; }
         //    else if (equippedSpell == spellB) { equippedSpell = spellA; }
         //}
-        if (Input.GetKeyDown(KeyCode.J)) { Attack(equippedSpell); }
+        if (Input.GetKeyDown(KeyCode.J) && !dashing) { Attack(equippedSpell); }
 
         if (currentAttack != null)
         {
@@ -102,6 +108,31 @@ public class scr_playerController : MonoBehaviour
         }
     }
 
+    void Dash()
+    {
+        dashing = true;
+        Debug.Log("Dash");
+        //body.MovePosition(body.position + velocity * dashSpd * Time.deltaTime);
+        //body.MovePosition(body.position);
+
+        var direction = activeFirePoint.transform.position - body.transform.position;
+        body.AddForce(direction.normalized * dashSpd, ForceMode.Impulse);
+        Invoke(nameof(ResetDash), dashCooldown);
+        //body.velocity = Vector3.zero;
+        //body.angularVelocity = Vector3.zero;
+
+        //body.MovePosition(activeFirePoint.transform.position );
+    }
+
+    private void ResetDash()
+    {
+        body.constraints = RigidbodyConstraints.FreezePosition;
+        body.constraints = RigidbodyConstraints.None;
+        body.constraints = RigidbodyConstraints.FreezeRotationX;
+        body.constraints = RigidbodyConstraints.FreezeRotationZ;
+        dashing = false;
+    }
+
     void Death()
     {
         Debug.Log("YOU DIED");
@@ -112,6 +143,7 @@ public class scr_playerController : MonoBehaviour
     {
         body.MovePosition(body.position + velocity * mSpd * Time.fixedDeltaTime);
         transform.eulerAngles = rotationSetting;
+
     }
 }
 

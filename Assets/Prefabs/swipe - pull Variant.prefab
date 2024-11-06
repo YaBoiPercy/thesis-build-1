@@ -16,6 +16,10 @@ PrefabInstance:
       propertyPath: PushSpell
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 687046720606720821, guid: 1864c493163aa4849ad49b62b0c2a079, type: 3}
+      propertyPath: pushForce
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 2922821225636103285, guid: 1864c493163aa4849ad49b62b0c2a079, type: 3}
       propertyPath: m_Name
       value: swipe - pull Variant

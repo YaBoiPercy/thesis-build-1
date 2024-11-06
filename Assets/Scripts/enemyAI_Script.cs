@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
+using TMPro;
 
 public class enemyAI_Script : MonoBehaviour
 {
+    public Text dmgTxt;
+
+
     public NavMeshAgent agent;
     public float health, slamSpd, dmg;
     public bool damageOnCollide = false;
@@ -25,6 +31,7 @@ public class enemyAI_Script : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.Find("player").transform;
         spawnPoint = gameObject.transform.position;
+        //dmgTxt = GameObject.Find("Dev Log").GetComponent<Text>();
     }
 
     // Update is called once per frame
@@ -83,9 +90,23 @@ public class enemyAI_Script : MonoBehaviour
 
     private void ResetAttack()
     {
+        Rigidbody body = GetComponent<Rigidbody>();
+        body.velocity = Vector3.zero;
         Debug.Log("Resetting attack");
         alreadyAttacked = false;
         damageOnCollide = true;
+    }
+
+    public void TakeDamage(float dmgTaken)
+    {
+        health -= dmgTaken;
+        dmgTxt.text = "> DEALT " + dmgTaken.ToString() + " DAMAGE";
+        Invoke(nameof(ResetDevLogText), 0.5f);
+    }
+
+    public void ResetDevLogText()
+    {
+        dmgTxt.text = ">";
     }
 
     private void OnCollisionEnter(Collision collision)

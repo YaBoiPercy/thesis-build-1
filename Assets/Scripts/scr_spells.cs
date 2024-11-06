@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class scr_spells : MonoBehaviour
 {
+    public scr_dialogueScript dmgTxt;
+
+
+
     //This script is intended to work on an object that comes into existence briefly and then goes away
     public float pushForce, pushRadius, pushDamage;
     private GameObject pulled;
@@ -44,7 +48,7 @@ public class scr_spells : MonoBehaviour
         {
             if (PushSpell) { Push(other.gameObject); }
             else if (PullSpell) { Pull(other.gameObject); }
-            if (other.gameObject.CompareTag("Enemy")) { other.gameObject.GetComponent<enemyAI_Script>().health -= pushDamage; }
+            //if (other.gameObject.CompareTag("Enemy")) { other.gameObject.GetComponent<enemyAI_Script>().health -= pushDamage; }
         }
     }
 
@@ -58,7 +62,16 @@ public class scr_spells : MonoBehaviour
         Debug.Log(direction);
 
         //Normalize keeps the value of a vector, but reduces it to 1. We use this to determine the direction of the pushed object relative to the player
-        pushedBody.AddForce(direction.normalized * pushForce, ForceMode.Force);
+        pushedBody.AddForce(direction.normalized * pushForce, ForceMode.Impulse);
+        if (pushedObject.CompareTag("Enemy")) 
+        {
+            //pushedObject.GetComponent<enemyAI_Script>().health -= pushDamage;
+            pushedObject.GetComponent<enemyAI_Script>().TakeDamage(pushDamage);
+            //TriggerDialogue();
+            //Invoke(nameof(ExitDialogue), 0.5f);
+        }
+        pushedObject = null; //Probably don't need this
+
     }
 
     void Pull(GameObject pulledObject)
@@ -67,5 +80,15 @@ public class scr_spells : MonoBehaviour
         {
             pulled = pulledObject;
         }
+    }
+
+    public void TriggerDialogue()
+    {
+        FindObjectOfType<scr_dialogueManager>().StartDialogue(dmgTxt);
+    }
+
+    public void ExitDialogue()
+    {
+        FindObjectOfType<scr_dialogueManager>().EndDialogue();
     }
 }
